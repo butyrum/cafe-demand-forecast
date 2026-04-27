@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@theme {
+  /* Tons exatos da imagem de referência */
+  --color-brand-bg: #f5eee6;        /* Fundo bege levemente rosado */
+  --color-card-bg: #fdfaf7;         /* Branco "creme" do card */
+  --color-input-bg: #e6d5c3;        /* Bege médio dos inputs */
+  --color-btn-main: #a65d2e;        /* Marrom terracota do botão */
+  --color-espresso: #2b1810;        /* Marrom quase preto para textos */
+  
+  --shadow-card: 0 20px 50px rgba(0, 0, 0, 0.05);
+  --shadow-input-inner: inset 2px 2px 6px rgba(0, 0, 0, 0.1), inset -2px -2px 6px rgba(255, 255, 255, 0.5);
+}
+
+* { font-family: 'Inter', sans-serif }
+
+body { background-color: var(--color-brand-bg) }
+
+.glass-card {
+  background-color: var(--color-card-bg);
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.input-styled {
+  background-color: var(--color-input-bg);
+  box-shadow: var(--shadow-input-inner);
+  border: none;
+}
