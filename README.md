@@ -1,166 +1,52 @@
-# ☕ Café Demand Forecast
+# ☕ Cafe Demand Forecast & AI Inventory Manager
 
-Sistema inteligente de **previsão de demanda e sugestão de produção** para cafeteria. Utiliza Inteligência Artificial (Groq API) para analisar o histórico de vendas e gerar recomendações de produção diária.
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![AI/LLM](https://img.shields.io/badge/AI_Agent-000000?style=for-the-badge&logo=openai&logoColor=white)
+![ClickUp](https://img.shields.io/badge/ClickUp-7B68EE?style=for-the-badge&logo=clickup&logoColor=white)
 
----
+## 📌 Sobre o Projeto
+O **Cafe Demand Forecast** é um sistema inteligente de gestão e previsão de estoque focado em operações de Food Service. Nascido de uma dor real na gestão operacional de uma cafeteria, o sistema monitora o inventário gerenciado no ClickUp e utiliza Inteligência Artificial para prever demandas e alertar sobre rupturas de estoque antes que elas aconteçam.
 
-## 🚀 Funcionalidades
+O projeto utiliza uma **Arquitetura de Microserviços**, onde o Core da aplicação (Autenticação, Banco de Dados e Regras de Negócio) é estruturado em Java, enquanto a inteligência de dados, LLMs e integrações analíticas são processadas por um serviço independente em Python.
 
-| Funcionalidade | Status |
-|---|---|
-| CRUD de Produtos | ✅ Implementado |
-| Registro de vendas diárias | ✅ Implementado |
-| Consulta por período e dia da semana | ✅ Implementado |
-| Previsão de demanda com IA (Groq) | ✅ Implementado |
-| Sugestão de produção com IA | ✅ Implementado |
-| DTOs com MapStruct | ✅ Implementado |
-| Documentação Swagger/OpenAPI | ✅ Implementado |
-| Autenticação JWT | 🔜 Planejado |
-| Migração para PostgreSQL | 🔜 Planejado |
-| Frontend React | 🔜 Planejado |
+## 🏗️ Arquitetura e Tecnologias
 
----
+O sistema é dividido em dois serviços principais que se comunicam de forma assíncrona/REST:
 
-## 🛠️ Stack
+1. **Core Service (Java / Spring Boot):**
+   - Autenticação e Autorização via **JWT**.
+   - Persistência e modelagem de dados operacionais com **PostgreSQL**.
+   - Orquestração da regra de negócios da cafeteria.
 
-| Tecnologia | Uso |
-|---|---|
-| Java 17 + Spring Boot 4 | Framework principal |
-| Spring Data JPA | Persistência |
-| Spring Security | Segurança (JWT planejado) |
-| H2 Database | Banco em memória (dev) |
-| Groq API (llama-3.3-70b) | IA para previsão de demanda |
-| MapStruct | Mapeamento DTO ↔ Entity |
-| Springdoc OpenAPI 2.8.8 | Documentação Swagger |
-| Lombok | Redução de boilerplate |
-| Maven | Gerenciamento de dependências |
+2. **AI & Data Service (Python) - *[Em Desenvolvimento]*:**
+   - Integração direta com a API do **ClickUp** para leitura em tempo real do estoque.
+   - **Agente de Inteligência Artificial** com contexto do negócio para análise de consumo.
+   - Algoritmo de previsão para identificar anomalias no consumo e disparar alertas de "Estoque Baixo" via mensageria/integração.
 
----
+## 🚀 Status e Funcionalidades
 
-## ⚙️ Como Executar
+### ✅ Implementado (Fase 1 - Core Backend)
+- [x] Configuração e modelagem do banco de dados **PostgreSQL**.
+- [x] Implementação de segurança corporativa utilizando tokens **JWT**.
+- [x] CRUD básico para entidades do sistema (Usuários, Produtos, Categorias).
+
+### 🚧 Próximos Passos (Fase 2 - Dados & IA)
+- [ ] Integração do serviço Python com a API Rest do **ClickUp**.
+- [ ] Construção do pipeline de extração de dados do estoque (ETL).
+- [ ] Implementação de IA/LLM com prompt focado em contexto de Food Service.
+- [ ] Configuração de comunicação entre o Microserviço Java e Python (via HTTP ou mensageria como RabbitMQ/Kafka).
+- [ ] Disparo automatizado de alertas de ruptura de estoque.
+
+## ⚙️ Como executar o projeto (Core Service)
 
 ### Pré-requisitos
+- Java 11+
+- PostgreSQL rodando localmente ou via Docker
+- Maven
 
-- Java 17+
-- Maven 3.9+
-- Conta gratuita no [Groq Console](https://console.groq.com)
-
-### Configuração
-
-1. Clone o repositório:
-
-```bash
-git clone https://github.com/butyrum/cafe-demand-forecast.git
-cd cafe-demand-forecast
-```
-
-2. Configure a variável de ambiente com sua chave Groq:
-
-```bash
-# Windows
-set GROQ_API_KEY=sua_chave_aqui
-
-# Linux/Mac
-export GROQ_API_KEY=sua_chave_aqui
-```
-
-3. Execute a aplicação:
-
-```bash
-./mvnw spring-boot:run
-```
-
-### Acessos
-
-| Recurso | URL |
-|---|---|
-| Swagger UI | http://localhost:8080/swagger-ui/index.html |
-| Console H2 | http://localhost:8080/h2-console |
-
-**Configuração H2 Console:**
-- JDBC URL: `jdbc:h2:mem:cafe_forecast`
-- Username: `sa`
-- Password: *(vazio)*
-
----
-
-## 📡 Endpoints da API
-
-### Produtos `/api/products`
-
-| Método | Endpoint | Descrição |
-|---|---|---|
-| GET | `/api/products` | Listar todos os produtos |
-| GET | `/api/products/{id}` | Buscar produto por ID |
-| GET | `/api/products/active` | Listar produtos ativos |
-| GET | `/api/products/category/{category}` | Buscar por categoria |
-| POST | `/api/products` | Criar novo produto |
-| PUT | `/api/products/{id}` | Atualizar produto |
-| DELETE | `/api/products/{id}` | Desativar produto |
-
-### Vendas `/api/sales`
-
-| Método | Endpoint | Descrição |
-|---|---|---|
-| GET | `/api/sales` | Listar todos os registros |
-| GET | `/api/sales/{id}` | Buscar por ID |
-| GET | `/api/sales/product/{productId}` | Vendas por produto |
-| GET | `/api/sales/period?startDate=&endDate=` | Vendas por período |
-| GET | `/api/sales/day/{dayOfWeek}` | Vendas por dia da semana |
-| GET | `/api/sales/product/{productId}/total` | Total vendido por produto |
-| POST | `/api/sales` | Registrar nova venda |
-| DELETE | `/api/sales/{id}` | Deletar registro |
-
-### Previsão de Demanda com IA `/api/forecast`
-
-| Método | Endpoint | Descrição |
-|---|---|---|
-| GET | `/api/forecast/demand/{productId}?productName=` | Previsão baseada no histórico |
-| POST | `/api/forecast/production` | Sugestão de quantidade a produzir |
-
-**Exemplo — Sugestão de produção:**
-
-```json
-POST /api/forecast/production
-{
-  "productName": "Cappuccino",
-  "forecastedDemand": 20,
-  "currentStock": 5
-}
-```
-
----
-
-## 📁 Arquitetura
-
-```
-src/main/java/com/cafe/forecast/
-├── config/          # SecurityConfig, SwaggerConfig
-├── controller/      # ProductController, SalesRecordController, ForecastController
-├── dto/             # ProductDTO, SalesRecordDTO
-├── mapper/          # ProductMapper, SalesRecordMapper (MapStruct)
-├── model/           # Product, SalesRecord (entidades JPA)
-├── repository/      # ProductRepository, SalesRecordRepository
-└── service/         # ProductService, SalesRecordService, AIForecastService
-```
-
----
-
-## 🗺️ Roadmap
-
-- [x] Fase 1 — CRUD de Produtos e Registros de Vendas
-- [x] Fase 2 — Integração com IA (Groq API)
-- [x] Fase 3 — DTOs com MapStruct
-- [ ] Fase 4 — Autenticação JWT com Spring Security
-- [ ] Fase 5 — Migração para PostgreSQL
-- [ ] Fase 6 — Módulo de Estoque e Ingredientes
-- [ ] Fase 7 — Frontend em React
-- [ ] Fase 8 — Integração com PDV (Mogo) e iFood
-
----
-
-## 👨‍💻 Autor
-
-**Breno de Jesus** — [@butyrum](https://github.com/butyrum)
-
-Projeto desenvolvido como freelance para gestão inteligente de cafeterias.
+### Passos
+1. Clone este repositório:
+   ```bash
+   git clone [https://github.com/BrenoDeJesuss/cafe-demand-forecast.git](https://github.com/BrenoDeJesuss/cafe-demand-forecast.git)
